@@ -6,7 +6,7 @@
 // n = how many clones 
 class Server(id: Int, n: Int) {
   var writeCount = 0;
-  private var dataMap = collection.mutable.Map[Int, String]();
+  var dataMap = collection.mutable.Map[Int, String]();
 
   var nextServer : Server = this;
   var prevServer : Server = this;
@@ -25,7 +25,7 @@ class Server(id: Int, n: Int) {
     {
       var cur = this;
       var x = 0;
-      for (x <- 0 to n){
+      for (x <- 1 to n){
         cur.writeData(key,data);
         cur = cur.nextServer;
       }
@@ -46,7 +46,6 @@ class Server(id: Int, n: Int) {
     if (id >= key && prevServer.getServerId() < key) return true;
     
     if (id < prevServer.getServerId()){
-      // the bridge.
       if (key < id || key > prevServer.getServerId()) return true;
     }
     return false;
@@ -55,7 +54,7 @@ class Server(id: Int, n: Int) {
     if (belongsToMe(key)) return true;
     var cur = nextServer;
     var x = 0;
-    for (x <-0 to n){
+    for (x <- 1 to n){
       if (cur.belongsToMe(key)) return true;
       cur = cur.nextServer;
     }
@@ -88,12 +87,14 @@ class Server(id: Int, n: Int) {
       prevServer.UpdateData();
 
       cur = this;
-      for (x <- 0 to n) {
+      for (x <- 1 to n) {
         cur = cur.prevServer;
         for ((k,v) <- cur.dataMap)
           writeData(k,v);
       }
   }
+
+
 
   def UpdateData() : Unit = {
     if (updatedNeeded)
