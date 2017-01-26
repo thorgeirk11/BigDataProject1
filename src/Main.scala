@@ -15,20 +15,39 @@ object Main {
 
   def main(args: Array[String]): Unit = {
     //parsePara(args)
-    var rnd = new Random(72);
+
+    var rnd = new Random(42);
     var network = new Server(rnd.nextInt(e+1),n);
     var x = 0;
     for (x <- 0 to s) {
       var k = rnd.nextInt(e+1);
-      new Server(k, n).connect(network);
-      println(k);
+      while (k == network.findSuccessor(k).getServerId()) {
+        k = rnd.nextInt(e+1);
+      }
+      network.connect(new Server(k, n));
+      //println(k);
     }
+    
+    var cur = network.nextServer;
+    while(cur != network){
+       println(cur.getServerId());
+       cur = cur.nextServer;
+    }
+
+    /**
     for (x <- 0 to w)
       network.put(rnd.nextInt(e+1),"lol"+x);
     for (x <- 0 to s) {
       println(network.getServerId() + ": " + network.writeCount);
       network = network.nextServer;
     }
+    
+    var k = 0;
+    while (k == network.findSuccessor(k).getServerId()) {
+      k = rnd.nextInt(e+1);
+    }
+    new Server(k, n).connect(network);
+    **/
   }
 
   def parsePara(args: Array[String]):Unit = {

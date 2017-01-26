@@ -10,6 +10,7 @@ class Server(id: Int, n: Int) {
 
   var nextServer : Server = this;
   var prevServer : Server = this;
+  var updatedNeeded : Boolean = false;
 
   def getServerId() : Int = {
     return id;
@@ -37,18 +38,17 @@ class Server(id: Int, n: Int) {
   }
   
   def findSuccessor(key : Int) : Server  = {
-    if (belongsToMe(key)) return nextServer;
+    if (belongsToMe(key)) return this;
     else return nextServer.findSuccessor(key);
   }
   def belongsToMe(key : Int) : Boolean = {
-    if (nextServer.getServerId() == id) return true;
-    if (key == id) return true;
-    if (this.id > nextServer.getServerId()){
+    if (prevServer.getServerId() == id) return true;
+    if (id >= key && prevServer.getServerId() < key) return true;
+    
+    if (id < prevServer.getServerId()){
       // the bridge.
-      if (key > this.id || key < nextServer.getServerId() ) return true;
+      if (key < id || key > prevServer.getServerId()) return true;
     }
-    if (this.id < key && nextServer.getServerId() > key) return true;
-
     return false;
   }
   def belongsToMyGroup(key : Int) : Boolean  = {
@@ -62,14 +62,53 @@ class Server(id: Int, n: Int) {
     return false;
   }
 
-  def connect(network : Server): Unit = { 
-    // Here we need to split the data space between this Server and the existingServer.
-    nextServer = network.findSuccessor(id);
-    prevServer = nextServer.prevServer;
+  // Connect a new node into a network.
+  def connect(newServer : Server): Server = {
+    var next = findSuccessor(newServer.getServerId());
+    var prev = next.prevServer;
 
-    prevServer.nextServer = this;
-    nextServer.prevServer = this;
+    newServer.nextServer = next;
+    newServer.prevServer = prev;
 
+    prev.nextServer = newServer;
+    next.prevServer = newServer;
     
+    //connectDataInit();
+    //prevServer.UpdateData();
+    return newServer;
+  }
+
+  private  def connectDataInit() : Unit = {
+      var cur = prevServer;
+      var x = 0;
+      for (x <- 0 to n+1){
+        cur.updatedNeeded = true;
+        cur = cur.nextServer;
+      }
+      prevServer.UpdateData();
+
+      cur = this;
+      for (x <- 0 to n) {
+        cur = cur.prevServer;
+        for ((k,v) <- cur.dataMap)
+          writeData(k,v);
+      }
+  }
+
+  def UpdateData() : Unit = {
+    if (updatedNeeded)
+    {
+      var cur = this;
+      var x = 0;
+      for (x <- 0 to n) {
+        cur = cur.prevServer;
+      }
+
+      var minId = cur.getServerId();
+      dataMap = dataMap.retain((k,v) => k > minId)
+      updatedNeeded = false;
+
+      nextServer.UpdateData();
+    }
   }
 }
