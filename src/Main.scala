@@ -14,20 +14,26 @@ object Main {
   var sm = 30;
 
   def main(args: Array[String]): Unit = {
-    parsePara(args);
-
-    var rnd = new Random();
+    //parsePara(args)
+    var rnd = new Random(72);
     var network = new Server(rnd.nextInt(e+1),n);
     var x = 0;
-    for (x <- 0 to s)
-      network.connect(new Server(rnd.nextInt(e+1),n));
-
+    for (x <- 0 to s) {
+      var k = rnd.nextInt(e+1);
+      network.connect(new Server(k, n));
+      println(k);
+    }
     for (x <- 0 to w)
       network.put(rnd.nextInt(e+1),"lol"+x);
+    for (x <- 0 to s) {
+      println(network.getServerId() + ": " + network.writeCount);
+      network = network.nextServer;
+    }
   }
 
   def parsePara(args: Array[String]):Unit = {
     for (arg <- args) {
+      println(arg);
       if (arg == "-s"){
         s = args.tail.head.toInt;
       }

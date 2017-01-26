@@ -5,7 +5,7 @@
 // Id = hash id for this server.
 // n = how many clones 
 class Server(id: Int, n: Int) {
-  private var writeCount = 0;
+  var writeCount = 0;
   private var dataMap = collection.mutable.Map[Int, String]();
 
   var nextServer : Server = this;
