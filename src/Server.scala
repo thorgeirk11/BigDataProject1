@@ -69,5 +69,7 @@ class Server(id: Int, n: Int) {
 
     prevServer.nextServer = this;
     nextServer.prevServer = this;
+
+    
   }
 }

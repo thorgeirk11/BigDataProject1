@@ -20,7 +20,7 @@ object Main {
     var x = 0;
     for (x <- 0 to s) {
       var k = rnd.nextInt(e+1);
-      network.connect(new Server(k, n));
+      new Server(k, n).connect(network);
       println(k);
     }
     for (x <- 0 to w)
