@@ -5,53 +5,60 @@
 // Id = hash id for this server.
 // n = how many clones 
 class Server(id: Int, n: Int) {
-  private var writeCount : Int;
-  private var datamap : collection.mutable.Map[Int, String];
+  private var writeCount = 0;
+  private var dataMap = collection.mutable.Map[Int, String]();
 
   var nextServer : Server = this;
   var prevServer : Server = this;
-  
-  def get(key: Int) : String { 
-    if (belongsToMyGroup(key)) return data[key]; 
+
+  def getServerId() : Int = {
+    return id;
+  }
+
+  def get(key: Int) : String = {
+    if (belongsToMyGroup(key)) return dataMap(key);
     else return nextServer.get(key);
   }
-  def put(key: Int, data : String) { 
+  def put(key: Int, data : String) : Unit = {
     if (belongsToMe(key))
     {
       var cur = this;
-      for (var x <- 0 to n){
+      var x = 0;
+      for (x <- 0 to n){
         cur.writeData(key,data);
         cur = cur.nextServer;
       }
     }
     else nextServer.put(key,data);
   }
-  def writeData(key:Int, data:String){
-    writeCount++;
-    datamap[key] = data;
+  def writeData(key:Int, data:String) :Unit = {
+    writeCount+=1;
+    dataMap(key) = data;
   }
   
-  def findSuccessor(key : Int) : Server {
-    if (belongs(key)) return nextServer;
+  def findSuccessor(key : Int) : Server  = {
+    if (belongsToMe(key)) return nextServer;
     else return nextServer.findSuccessor(key);
   }
-  def belongsToMe(key : Int) : Boolean {
+  def belongsToMe(key : Int) : Boolean = {
     if (key == id) return true;
-    if (id > nextServer.id){ 
+    if (this.id > nextServer.getServerId()){
       // the bridge.
-      if (key > id || key < nextServer.id ) return true;
+      if (key > this.id || key < nextServer.getServerId() ) return true;
     }
-    if (id < key && nextServer.id > key) return true;
+    if (this.id < key && nextServer.getServerId() > key) return true;
 
     return false;
   }
-  def belongsToMyGroup(key : Int) : Boolean {
+  def belongsToMyGroup(key : Int) : Boolean  = {
     if (belongsToMe(key)) return true;
     var cur = nextServer;
-    for (var x <- 0 to n){
+    var x = 0;
+    for (x <-0 to n){
       if (cur.belongsToMe(key)) return true;
       cur = cur.nextServer;
     }
+    return false;
   }
 
   def connect(network : Server): Unit = { 

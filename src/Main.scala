@@ -3,6 +3,7 @@
   */
 
 import scala.util
+import scala.util.Random
 
 object Main {
   var s = 10;
@@ -17,14 +18,15 @@ object Main {
 
     var rnd = new Random();
     var network = new Server(rnd.nextInt(e+1),n);
-    for (var x <- 0..s)
+    var x = 0;
+    for (x <- 0 to s)
       network.connect(new Server(rnd.nextInt(e+1),n));
 
-    for (var x <- 0..w)
+    for (x <- 0 to w)
       network.put(rnd.nextInt(e+1),"lol"+x);
   }
 
-  def parsePara(args: Array[String]):Unit{
+  def parsePara(args: Array[String]):Unit = {
     for (arg <- args) {
       if (arg == "-s"){
         s = args.tail.head.toInt;
