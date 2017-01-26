@@ -41,6 +41,7 @@ class Server(id: Int, n: Int) {
     else return nextServer.findSuccessor(key);
   }
   def belongsToMe(key : Int) : Boolean = {
+    if (nextServer.getServerId() == id) return true;
     if (key == id) return true;
     if (this.id > nextServer.getServerId()){
       // the bridge.
