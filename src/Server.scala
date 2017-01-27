@@ -32,16 +32,16 @@ class Server(id: Int, n: Int) {
     }
     else nextServer.put(key,data);
   }
-  def writeData(key:Int, data:String) :Unit = {
+  private def writeData(key:Int, data:String) :Unit = {
     writeCount+=1;
     dataMap(key) = data;
   }
   
-  def findSuccessor(key : Int) : Server  = {
+  private def findSuccessor(key : Int) : Server  = {
     if (belongsToMe(key)) return this;
     else return nextServer.findSuccessor(key);
   }
-  def belongsToMe(key : Int) : Boolean = {
+  private def belongsToMe(key : Int) : Boolean = {
     if (prevServer.getServerId() == id) return true;
     if (id >= key && prevServer.getServerId() < key) return true;
     
@@ -50,13 +50,13 @@ class Server(id: Int, n: Int) {
     }
     return false;
   }
-  def belongsToMyGroup(key : Int) : Boolean  = {
+  private def belongsToMyGroup(key : Int) : Boolean  = {
     if (belongsToMe(key)) return true;
-    var cur = nextServer;
+    var cur = prevServer;
     var x = 0;
     for (x <- 1 to n){
       if (cur.belongsToMe(key)) return true;
-      cur = cur.nextServer;
+      cur = cur.prevServer;
     }
     return false;
   }
@@ -72,36 +72,35 @@ class Server(id: Int, n: Int) {
     prev.nextServer = newServer;
     next.prevServer = newServer;
     
-    //connectDataInit();
-    //prevServer.UpdateData();
-    return newServer;
+    newServer.connectDataInit();
+    return this;
   }
 
   private  def connectDataInit() : Unit = {
-      var cur = prevServer;
+      var cur = nextServer;
       var x = 0;
-      for (x <- 0 to n+1){
+      for (x <- 1 to n){
         cur.updatedNeeded = true;
         cur = cur.nextServer;
       }
-      prevServer.UpdateData();
+      nextServer.UpdateData();
 
-      cur = this;
-      for (x <- 1 to n) {
+      cur = nextServer;
+      for (x <- 0 to n+1) {
+        for ((k,v) <- cur.dataMap) {
+          if (belongsToMyGroup(k))
+            writeData(k,v)
+        }
         cur = cur.prevServer;
-        for ((k,v) <- cur.dataMap)
-          writeData(k,v);
       }
   }
 
-
-
-  def UpdateData() : Unit = {
+  private def UpdateData() : Unit = {
     if (updatedNeeded)
     {
       var cur = this;
       var x = 0;
-      for (x <- 0 to n) {
+      for (x <- 1 to n) {
         cur = cur.prevServer;
       }
 

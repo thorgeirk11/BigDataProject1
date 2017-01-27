@@ -14,34 +14,38 @@ object Main {
   var sm = 30;
 
   def main(args: Array[String]): Unit = {
+    var network = buildTestNetwork(3,2)
 
-    var n1 = new Server(10,2);
-    var n2 = new Server(20,2);
-    var n3 = new Server(30,2);
-    var n4 = new Server(40,2);
-    var n5 = new Server(50,2);
-    var n6 = new Server(60,2);
+    network.put(8,"_")
 
-    var network = n1.connect(n2).connect(n3).
-                     connect(n4).connect(n5).
-                     connect(n6);
-
-    network.put(15,"20/30");
-    network.put(25,"30/40");
-    network.put(26,"30/40");
-
-    println("Node 10:")
-    n1.dataMap.foreach(println);
-    println("Node 20:")
-    n2.dataMap.foreach(println);
-    println("Node 30:")
-    n3.dataMap.foreach(println);
-    println("Node 40:")
-    n4.dataMap.foreach(println);
-    println("Node 50:")
-    n5.dataMap.foreach(println);
+    print(network)
+    println();
+    println("NewNode 15")
+    network.connect(new Server(15,2))
+    
+    print(network)
+  }
 
 
+  def buildTestNetwork(size : Int, replicationFactor : Int) : Server = {
+    var network = new Server(10, replicationFactor);
+    var x = 0;
+    for (x <- 2 to size) {
+      network.connect(new Server(x * 10, replicationFactor));
+    }
+    return network;
+  }
+  
+  def print(network : Server) : Unit ={
+    var cur = network 
+    while (cur.nextServer != network) { 
+      println("Node " + cur.getServerId() + ":")
+      cur.dataMap.foreach(println);
+      cur = cur.nextServer;
+    }
+    println("Node " + cur.getServerId() + ":")
+    cur.dataMap.foreach(println);
+  }
     /**
     var rnd = new Random(42);
     var network = new Server(rnd.nextInt(e+1),n);
@@ -75,7 +79,7 @@ object Main {
     }
     new Server(k, n).connect(network);
     **/
-  }
+  //}
 
   def parsePara(args: Array[String]):Unit = {
     for (arg <- args) {
