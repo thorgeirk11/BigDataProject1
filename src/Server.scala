@@ -2,11 +2,13 @@
   * Created by centos on 1/26/17.
   */
   
-// Id = hash id for this server.
-// n = how many clones 
-class Server(id: Int, n: Int) {
+// Id = hash id for this server
+// n = data replication factor 
+// c = how many unique keys in the circle
+class Server(id: Int, n: Int, c: Int) {
   var writeCount = 0;
   var dataMap = collection.mutable.Map[Int, String]();
+  //var fingerTable = List[Server];
 
   var nextServer : Server = this;
   var prevServer : Server = this;
@@ -15,6 +17,14 @@ class Server(id: Int, n: Int) {
   def getServerId() : Int = {
     return id;
   }
+
+/**
+  def buildFingerTable() : Unit ={
+    
+    while ()
+    fingerTable.add(nextServer);
+  }
+*/
 
   def get(key: Int) : String = {
     if (belongsToMyGroup(key)) return dataMap(key);
@@ -43,7 +53,8 @@ class Server(id: Int, n: Int) {
   }
   private def belongsToMe(key : Int) : Boolean = {
     if (prevServer.getServerId() == id) return true;
-    if (id >= key && prevServer.getServerId() < key) return true;
+    if (id == key) return true;
+    if (id > key && prevServer.getServerId() < key) return true;
     
     if (id < prevServer.getServerId()){
       if (key < id || key > prevServer.getServerId()) return true;
@@ -73,6 +84,8 @@ class Server(id: Int, n: Int) {
     next.prevServer = newServer;
     
     newServer.connectDataInit();
+ 
+   // buildFingerTable();
     return this;
   }
 
