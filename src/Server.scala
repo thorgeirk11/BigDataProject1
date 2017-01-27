@@ -7,6 +7,7 @@
 // c = how many unique keys in the circle
 class Server(id: Int, n: Int, c: Int)  {
   var writeCount = 0;
+  var messageCount = 0;
   var dataMap = collection.mutable.Map[Int, String]();
   var fingerTable = new Array[Server](0);
 
@@ -14,35 +15,43 @@ class Server(id: Int, n: Int, c: Int)  {
   var prevServer : Server = this;
   var dataUpdateNeeded : Boolean = false;
 
-  def getServerId() : Int = {
-    return id;
-  }
+  def getServerId() : Int = id;
 
-  def buildFingerTable() : Unit ={
+  def buildFingerTable() : Unit = {
     var size = math.floor(math.log10(c/2f) / math.log10(2.0)).toInt;
     fingerTable = new Array[Server](size);
-    var i = 0; 
-    for (i <- 0 to size-1) {
-      var figerId = math.round((id + math.pow(2,i+1)) %  c).toInt;
-      fingerTable(i) = findSuccessor(figerId);
-    }
-
+    UpdateFingerTable();
+    
     //Update fingertables 
+    prevServer.UpdateFingerTable();
+    var prevServerId = prevServer.getServerId();
     for (i <- 0 to size-1) {
-      var figerId = math.round((id - math.pow(2,i+1)) %  c).toInt;
-      findSuccessor(figerId).UpdateFingerTable();
+      var fingerId = java.lang.Math.floorMod((prevServerId - math.pow(2,i+1)).toInt,  c);
+      findSuccessor(fingerId).UpdateFingerTable();
     }
   }
 
   def UpdateFingerTable() : Unit ={
-    var i = 0; 
     for (i <- 0 to fingerTable.length-1) {
-      var figerId = math.round((id + math.pow(2,i+1)) %  c).toInt;
-      fingerTable(i) = findSuccessor(figerId);
+      var fingerId = java.lang.Math.floorMod((id + math.pow(2,i+1)).toInt,  c);
+      fingerTable(i) = findSuccessor(fingerId);
     }
   }
 
+  def getWithFinger(key:Int) : String = {
+    messageCount+=1;
+    if (dataMap.contains(key)) return dataMap(key); 
+    if (belongsToMe(key)) return null;
+    
+    var n_key = key;
+    if (key < id) n_key = key + c;
+    var closest = fingerTable.minBy(s => if (s.getServerId() < id) math.abs( c + s.getServerId() - n_key) 
+                                         else math.abs( s.getServerId() - n_key));
+    return closest.getWithFinger(key);
+  }
+  
   def get(key: Int) : String = {
+    messageCount += 1;
     if (belongsToMyGroup(key)) return dataMap(key);
     else return nextServer.get(key);
   }
