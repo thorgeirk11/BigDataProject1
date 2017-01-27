@@ -14,31 +14,34 @@ object Main {
   var sm = 30;
 
   def main(args: Array[String]): Unit = {
-    var network = buildTestNetwork(3,2)
+    /*
+    var network = buildTestNetwork(3, 2)
 
-    network.put(8,"_")
+    network.put(8, "_")
 
     print(network)
     println();
     println("NewNode 15")
-    network.connect(new Server(15,2))
-    
+    network.connect(new Server(15, 2))
+
     print(network)
+    */
+    test1();
   }
 
 
-  def buildTestNetwork(size : Int, replicationFactor : Int) : Server = {
-    var network = new Server(10, replicationFactor);
+  def buildTestNetwork(size: Int, replicationFactor: Int): Server = {
+    var network = new Server(10, replicationFactor,e);
     var x = 0;
     for (x <- 2 to size) {
-      network.connect(new Server(x * 10, replicationFactor));
+      network.connect(new Server(x * 10, replicationFactor,e));
     }
     return network;
   }
-  
-  def print(network : Server) : Unit ={
-    var cur = network 
-    while (cur.nextServer != network) { 
+
+  def print(network: Server): Unit = {
+    var cur = network
+    while (cur.nextServer != network) {
       println("Node " + cur.getServerId() + ":")
       cur.dataMap.foreach(println);
       cur = cur.nextServer;
@@ -46,41 +49,64 @@ object Main {
     println("Node " + cur.getServerId() + ":")
     cur.dataMap.foreach(println);
   }
-    /**
-    var rnd = new Random(42);
-    var network = new Server(rnd.nextInt(e+1),n);
+  var serverList:List[Server] = List()
+  var intList:List[Int] = List()
+  var rnd = new Random(42);
+  def test1(): Unit = {
+
+
+    var network = new Server(rnd.nextInt(e + 1), n,e);
+    serverList ::= network
+    intList ::= network.getServerId()
     var x = 0;
-    for (x <- 0 to s) {
-      var k = rnd.nextInt(e+1);
-      while (k == network.findSuccessor(k).getServerId()) {
-        k = rnd.nextInt(e+1);
+    for (x <- 1 to s) {
+      var k = rnd.nextInt(e + 1);
+      while (intList.contains(k)) {
+        k = rnd.nextInt(e + 1);
       }
-      network.connect(new Server(k, n));
+      var tmp = new Server(k,n,e)
+      network.connect(tmp);
+      serverList ::= tmp
+      intList ::= k
     }
-    
-    var cur = network.nextServer;
-    while(cur != network){
-       println(cur.getServerId());
-       cur = cur.nextServer;
-    }
-*/
 
-    /**
-    for (x <- 0 to w)
-      network.put(rnd.nextInt(e+1),"lol"+x);
-    for (x <- 0 to s) {
-      println(network.getServerId() + ": " + network.writeCount);
-      network = network.nextServer;
-    }
-    
-    var k = 0;
-    while (k == network.findSuccessor(k).getServerId()) {
-      k = rnd.nextInt(e+1);
-    }
-    new Server(k, n).connect(network);
-    **/
-  //}
 
+    writeToNetwork()
+    printWriteCount(network,s)
+    //begin test 2
+    for(x <- s to sm by i) {
+      var j = 0
+      for (j <- 0 to i) {
+        var k = rnd.nextInt(e + 1);
+        while (intList.contains(k)) {
+          k = rnd.nextInt(e + 1);
+        }
+        var tmp = new Server(k, n, e)
+        network.connect(tmp);
+        serverList ::= tmp
+        intList ::= k
+      }
+      writeToNetwork()
+      printWriteCount(network,x)
+    }
+  }
+  def writeToNetwork() : Unit = {
+    var x = 0
+    for (x <- 0 to w) {
+      var i = rnd.nextInt(s+1)
+      serverList(i).put(rnd.nextInt(e+1),"lol"+x)
+    }
+  }
+  def printWriteCount(network : Server,size : Int): Unit = {
+    println("NetworkSize: " + size)
+    var cur = network
+    for (x <- 0 to size) {
+      println(cur.getServerId() + ": " + cur.writeCount);
+      cur = cur.nextServer;
+    }
+    println("-----------------------")
+
+  }
   def parsePara(args: Array[String]):Unit = {
     for (arg <- args) {
       println(arg);
@@ -104,4 +130,5 @@ object Main {
       }
     }
   }
+
 }
