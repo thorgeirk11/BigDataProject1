@@ -8,32 +8,39 @@
 class Server(id: Int, n: Int, c: Int)  {
   var writeCount = 0;
   var dataMap = collection.mutable.Map[Int, String]();
-  var fingerTable = new Array[Server](math.floor(math.log10(c) / math.log10(2.0)).toInt);;
+  var fingerTable = new Array[Server](0);
 
   var nextServer : Server = this;
   var prevServer : Server = this;
-  var updatedNeeded : Boolean = false;
+  var dataUpdateNeeded : Boolean = false;
 
   def getServerId() : Int = {
     return id;
   }
 
   def buildFingerTable() : Unit ={
-    var curId = id;
+    var size = math.floor(math.log10(c/2f) / math.log10(2.0)).toInt;
+    fingerTable = new Array[Server](size);
     var i = 0; 
-    for (i <- 1 to fingerTable.size){
-      curId = math.floor((curId + math.pow(2,1)) %  c).toInt;
-      fingerTable(i) = findSuccessor(curId);
+    for (i <- 0 to size-1) {
+      var figerId = math.round((id + math.pow(2,i+1)) %  c).toInt;
+      fingerTable(i) = findSuccessor(figerId);
+    }
+
+    //Update fingertables 
+    for (i <- 0 to size-1) {
+      var figerId = math.round((id - math.pow(2,i+1)) %  c).toInt;
+      findSuccessor(figerId).UpdateFingerTable();
     }
   }
 
-  /**
-  def closest_preceding_finger(id) : Unit = {
-    for (i = m to 1)
-      if (fingerTable[i].getServerId() )
+  def UpdateFingerTable() : Unit ={
+    var i = 0; 
+    for (i <- 0 to fingerTable.length-1) {
+      var figerId = math.round((id + math.pow(2,i+1)) %  c).toInt;
+      fingerTable(i) = findSuccessor(figerId);
+    }
   }
-
-  */
 
   def get(key: Int) : String = {
     if (belongsToMyGroup(key)) return dataMap(key);
@@ -93,8 +100,8 @@ class Server(id: Int, n: Int, c: Int)  {
     next.prevServer = newServer;
     
     newServer.connectDataInit();
- 
-   
+    newServer.buildFingerTable();
+
     return this;
   }
 
@@ -102,7 +109,7 @@ class Server(id: Int, n: Int, c: Int)  {
       var cur = nextServer;
       var x = 0;
       for (x <- 1 to n){
-        cur.updatedNeeded = true;
+        cur.dataUpdateNeeded = true;
         cur = cur.nextServer;
       }
       nextServer.UpdateData();
@@ -116,11 +123,10 @@ class Server(id: Int, n: Int, c: Int)  {
         cur = cur.prevServer;
       }
 
-      buildFingerTable();
   }
 
   private def UpdateData() : Unit = {
-    if (updatedNeeded)
+    if (dataUpdateNeeded)
     {
       var cur = this;
       var x = 0;
@@ -130,7 +136,7 @@ class Server(id: Int, n: Int, c: Int)  {
 
       var minId = cur.getServerId();
       dataMap = dataMap.retain((k,v) => k > minId)
-      updatedNeeded = false;
+      dataUpdateNeeded = false;
 
       nextServer.UpdateData();
     }
