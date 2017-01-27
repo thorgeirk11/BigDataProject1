@@ -14,27 +14,28 @@ object Main {
   var sm = 30;
 
   def main(args: Array[String]): Unit = {
-    /*
-    var network = buildTestNetwork(3, 2)
-
+    
+    var network = buildTestNetwork(3, 2, 32)
+    network.buildFingerTable();
     network.put(8, "_")
 
     print(network)
     println();
     println("NewNode 15")
-    network.connect(new Server(15, 2))
-
+    var n15 = new Server(15, 2,32);
+    network.connect(n15);
+    //for (x <- n15.fingerTable) println(x.getServerId());
     print(network)
-    */
-    test1();
+    
+    //test1();
   }
 
 
-  def buildTestNetwork(size: Int, replicationFactor: Int): Server = {
-    var network = new Server(10, replicationFactor,e);
+  def buildTestNetwork(size: Int, replicationFactor: Int, c:Int): Server = {
+    var network = new Server(10, replicationFactor,c);
     var x = 0;
     for (x <- 2 to size) {
-      network.connect(new Server(x * 10, replicationFactor,e));
+      network.connect(new Server(x * 10, replicationFactor,c));
     }
     return network;
   }
@@ -43,11 +44,11 @@ object Main {
     var cur = network
     while (cur.nextServer != network) {
       println("Node " + cur.getServerId() + ":")
-      cur.dataMap.foreach(println);
+      for (x <- cur.fingerTable) println(x.getServerId());
       cur = cur.nextServer;
     }
     println("Node " + cur.getServerId() + ":")
-    cur.dataMap.foreach(println);
+    for (x <- cur.fingerTable) println(x.getServerId());
   }
   var serverList:List[Server] = List()
   var intList:List[Int] = List()
