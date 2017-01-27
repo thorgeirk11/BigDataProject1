@@ -5,10 +5,10 @@
 // Id = hash id for this server
 // n = data replication factor 
 // c = how many unique keys in the circle
-class Server(id: Int, n: Int, c: Int) {
+class Server(id: Int, n: Int, c: Int)  {
   var writeCount = 0;
   var dataMap = collection.mutable.Map[Int, String]();
-  //var fingerTable = List[Server];
+  var fingerTable = new Array[Server](math.floor(math.log10(c) / math.log10(2.0)).toInt);;
 
   var nextServer : Server = this;
   var prevServer : Server = this;
@@ -18,13 +18,22 @@ class Server(id: Int, n: Int, c: Int) {
     return id;
   }
 
-/**
   def buildFingerTable() : Unit ={
-    
-    while ()
-    fingerTable.add(nextServer);
+    var curId = id;
+    var i = 0; 
+    for (i <- 1 to fingerTable.size){
+      curId = math.floor((curId + math.pow(2,1)) %  c).toInt;
+      fingerTable(i) = findSuccessor(curId);
+    }
   }
-*/
+
+  /**
+  def closest_preceding_finger(id) : Unit = {
+    for (i = m to 1)
+      if (fingerTable[i].getServerId() )
+  }
+
+  */
 
   def get(key: Int) : String = {
     if (belongsToMyGroup(key)) return dataMap(key);
@@ -85,7 +94,7 @@ class Server(id: Int, n: Int, c: Int) {
     
     newServer.connectDataInit();
  
-   // buildFingerTable();
+   
     return this;
   }
 
@@ -106,6 +115,8 @@ class Server(id: Int, n: Int, c: Int) {
         }
         cur = cur.prevServer;
       }
+
+      buildFingerTable();
   }
 
   private def UpdateData() : Unit = {
