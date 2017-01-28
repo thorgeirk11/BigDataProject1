@@ -14,6 +14,9 @@ object Main {
   var sm = 30;
   var rnd = new Random(42);
   def main(args: Array[String]): Unit = {
+    parsePara(args)
+    println("Parameters: S: " + s + " , E: " + e + " , N: "+ n + " , W: "+ w + " , I:" + i + " , Sm: " + sm)
+    println("Resetting counter between each W random write operations")
     println("---------------------")
     println("Testing writes by just going in a circle")
     testPut();
@@ -60,11 +63,10 @@ object Main {
       intList2 ::= k
     }
 
-    printWriteCount(network, serverList2.size)
-    writeToNetworkWithFinger(0)
+    writeToNetworkWithFinger()
     printWriteCount(network, serverList2.size)
     printPutFingerCount(network)
-
+    resetAllCounters(network)
     //begin test 2
 
     for(x <- s to sm-i by i) {
@@ -80,12 +82,11 @@ object Main {
         serverList2 ::= tmp
         intList2 ::= k
       }
-      writeToNetworkWithFinger(x)
+      writeToNetworkWithFinger()
       printWriteCount(network,serverList2.size)
       printPutFingerCount(network)
+      resetAllCounters(network)
     }
-
-
 
   }
   def testPut(): Unit = {
@@ -108,6 +109,7 @@ object Main {
     writeToNetwork()
     printWriteCount(network,serverList.size)
     printPutCount(network)
+    resetAllCounters(network)
     //begin test 2
 
      for(x <- s to sm-i by i) {
@@ -126,6 +128,7 @@ object Main {
       writeToNetwork()
       printWriteCount(network,serverList.size);
       printPutCount(network)
+      resetAllCounters(network)
     }
 
         
@@ -139,21 +142,12 @@ object Main {
       serverList(i).put(rnd.nextInt(e+1), "lol"+x)
     }
   }
-  def writeToNetworkWithFinger(derp : Int) : Unit = {
-    var cur = serverList2(0)
-    while(cur.nextServer != serverList2(0)){
-      println("ServerID: " + cur.getServerId)
-      println("fingerTable:" )
-      for(s <- cur.fingerTable) println{s.getServerId()}
-      cur =cur.nextServer
-    }
-    serverList2(0).putWithFinger(5950, "lol")
-    
+  def writeToNetworkWithFinger() : Unit = {
+
     var x = 0
     for (x <- 0 to w) {
       var i = rnd.nextInt(s+1)
       var key = rnd.nextInt(e+1);
-      if(derp == 25) println(key);
       serverList2(i).putWithFinger(key, "lol"+x)
     }
   }
@@ -200,25 +194,26 @@ object Main {
     println("Put Finger alltogether: " + total)
   }
   def parsePara(args: Array[String]):Unit = {
-    for (arg <- args) {
-      println(arg);
-      if (arg == "-s"){
-        s = args.tail.head.toInt;
+    var x = 0
+    for (x <- 0 to args.size -1 ) {
+
+      if (args(x) == "-s"){
+        s = args(x+1).toInt;
       }
-      if (arg == "-e"){
-        e = args.tail.head.toInt;
+      if (args(x) == "-e"){
+        e = args(x+1).toInt;
       }
-      if (arg == "-n"){
-        n = args.tail.head.toInt;
+      if (args(x) =="-n"){
+        n = args(x+1).toInt;
       }
-      if (arg == "-w"){
-        w = args.tail.head.toInt;
+      if (args(x) =="-w"){
+        w = args(x+1).toInt;
       }
-      if (arg == "-i"){
-        i = args.tail.head.toInt;
+      if (args(x) == "-i"){
+        i = args(x+1).toInt;
       }
-      if (arg == "-sm"){
-        sm = args.tail.head.toInt;
+      if (args(x) == "-sm"){
+        sm = args(x+1).toInt;
       }
     }
   }
