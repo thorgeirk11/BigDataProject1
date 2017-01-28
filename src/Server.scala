@@ -7,6 +7,8 @@
 // c = how many unique keys in the circle
 class Server(id: Int, n: Int, c: Int)  {
   var writeCount = 0;
+  var putCount = 0
+  var putWithFingerCount = 0
   var messageCount = 0;
   var dataMap = collection.mutable.Map[Int, String]();
   var fingerTable = new Array[Server](0);
@@ -15,6 +17,12 @@ class Server(id: Int, n: Int, c: Int)  {
   var prevServer : Server = this;
   var dataUpdateNeeded : Boolean = false;
 
+  def resetCounters() : Unit = {
+    writeCount = 0
+    putCount = 0
+    putWithFingerCount = 0
+    messageCount = 0
+  }
   def getServerId() : Int = id;
 
   def buildFingerTable() : Unit = {
@@ -50,6 +58,7 @@ class Server(id: Int, n: Int, c: Int)  {
     return next.getWithFinger(key);
   }
   def putWithFinger(key: Int, data : String) : Unit = {
+    putWithFingerCount+=1
     if (belongsToMe(key))
     {
       var cur = this;
@@ -84,6 +93,7 @@ class Server(id: Int, n: Int, c: Int)  {
     else return nextServer.get(key);
   }
   def put(key: Int, data : String) : Unit = {
+    putCount+=1
     if (belongsToMe(key))
     {
       var cur = this;
