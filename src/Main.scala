@@ -45,6 +45,7 @@ object Main {
   def testPutFinger() : Unit = {
     var network = new Server(rnd.nextInt(e + 1), n,e);
     network.buildFingerTable();
+
     serverList2 ::= network
     intList2 ::= network.getServerId()
     var x = 0;
@@ -59,8 +60,8 @@ object Main {
       intList2 ::= k
     }
 
-
-    writeToNetworkWithFinger()
+    printWriteCount(network, serverList2.size)
+    writeToNetworkWithFinger(0)
     printWriteCount(network, serverList2.size)
     printPutFingerCount(network)
 
@@ -79,7 +80,7 @@ object Main {
         serverList2 ::= tmp
         intList2 ::= k
       }
-      writeToNetworkWithFinger()
+      writeToNetworkWithFinger(x)
       printWriteCount(network,serverList2.size)
       printPutFingerCount(network)
     }
@@ -89,7 +90,6 @@ object Main {
   }
   def testPut(): Unit = {
     var network = new Server(rnd.nextInt(e + 1), n,e);
-    network.buildFingerTable();
     serverList ::= network
     intList ::= network.getServerId()
     var x = 0;
@@ -139,11 +139,22 @@ object Main {
       serverList(i).put(rnd.nextInt(e+1), "lol"+x)
     }
   }
-  def writeToNetworkWithFinger() : Unit = {
+  def writeToNetworkWithFinger(derp : Int) : Unit = {
+    var cur = serverList2(0)
+    while(cur.nextServer != serverList2(0)){
+      println("ServerID: " + cur.getServerId)
+      println("fingerTable:" )
+      for(s <- cur.fingerTable) println{s.getServerId()}
+      cur =cur.nextServer
+    }
+    serverList2(0).putWithFinger(5950, "lol")
+    
     var x = 0
     for (x <- 0 to w) {
       var i = rnd.nextInt(s+1)
-      serverList2(i).putWithFinger(rnd.nextInt(e+1), "lol"+x)
+      var key = rnd.nextInt(e+1);
+      if(derp == 25) println(key);
+      serverList2(i).putWithFinger(key, "lol"+x)
     }
   }
   def printWriteCount(network : Server,size : Int): Unit = {

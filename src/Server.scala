@@ -12,6 +12,7 @@ class Server(id: Int, n: Int, c: Int)  {
   var messageCount = 0;
   var dataMap = collection.mutable.Map[Int, String]();
   var fingerTable = new Array[Server](0);
+  var flatFingerTable = new Array[Int](0);
 
   var nextServer : Server = this;
   var prevServer : Server = this;
@@ -28,6 +29,7 @@ class Server(id: Int, n: Int, c: Int)  {
   def buildFingerTable() : Unit = {
     var size = math.floor(math.log10(c/2f) / math.log10(2.0)).toInt;
     fingerTable = new Array[Server](size);
+    flatFingerTable = new Array[Int](size);
     UpdateFingerTable();
     
     //Update fingertables 
@@ -44,9 +46,16 @@ class Server(id: Int, n: Int, c: Int)  {
       buildFingerTable();
     }
     else{
-      for (i <- 0 to fingerTable.length-1) {
+      fingerTable(0) = nextServer;
+      for (i <- 1 to fingerTable.length-1) {
         var fingerId = java.lang.Math.floorMod((id + math.pow(2,i+1)).toInt,  c);
         fingerTable(i) = findSuccessor(fingerId);
+        
+        var fId = fingerTable(i).getServerId();
+        if (fId < id)
+          flatFingerTable(i) = c + fId; 
+        else 
+          flatFingerTable(i) = fId;
       }
     }
   }
@@ -77,14 +86,14 @@ class Server(id: Int, n: Int, c: Int)  {
     if (belongsToMe(key)) return this;
     var n_key = key;
     if (key < id) n_key = key + c;
-    var closest = fingerTable.minBy(s => if (s.getServerId() < id) 
-                                           math.abs( c + s.getServerId() - n_key) 
-                                         else 
-                                           math.abs( s.getServerId() - n_key));
-    if (closest.getServerId() < key && id < closest.getServerId())
-      return closest.nextServer;
-    else
-      return closest;
+
+    for (i <- 0 to flatFingerTable.size - 1 ){
+        var flatId = flatFingerTable(i);
+        if (flatId == n_key) return fingerTable(i);
+        if (n_key < flatId)
+          return fingerTable(math.max(0, i-1));
+    }  
+    return fingerTable(fingerTable.size - 1);
   }
 
   def get(key: Int) : String = {
