@@ -39,27 +39,44 @@ class Server(id: Int, n: Int, c: Int)  {
   }
 
   def getWithFinger(key:Int) : String = {
+    if (dataMap.contains(key)) return dataMap(key);
+    if (belongsToMe(key)) return null;
+    var next = findNextWithFinger(key);
+    return next.getWithFinger(key);
+  }
+  def putWithFinger(key: Int, data : String) : Unit = {
+    if (belongsToMe(key))
+    {
+      var cur = this;
+      var x = 0;
+      for (x <- 1 to n){
+        cur.writeData(key,data);
+        cur = cur.nextServer;
+      }
+    }
+    else 
+      findNextWithFinger(key).put(key,data);
+  }
+  
+  def findNextWithFinger(key:Int) : Server ={
     messageCount+=1;
     println(id);
-    if (dataMap.contains(key)) return dataMap(key); 
-    if (belongsToMe(key)) return null;
-    
+    if (belongsToMe(key)) return this;
     var n_key = key;
     if (key < id) n_key = key + c;
     var closest = fingerTable.minBy(s => if (s.getServerId() < id) 
                                            math.abs( c + s.getServerId() - n_key) 
                                          else 
                                            math.abs( s.getServerId() - n_key));
-    
     if (closest.getServerId() < key)
-      return closest.nextServer.getWithFinger(key);
+      return closest.nextServer;
     else
-      return closest.getWithFinger(key);
+      return closest;
   }
-  
+
   def get(key: Int) : String = {
     messageCount += 1;
-    if (belongsToMyGroup(key)) return dataMap(key);
+    if (belongsToMe(key)) return dataMap(key);
     else return nextServer.get(key);
   }
   def put(key: Int, data : String) : Unit = {
