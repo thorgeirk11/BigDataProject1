@@ -60,7 +60,6 @@ class Server(id: Int, n: Int, c: Int)  {
   
   def findNextWithFinger(key:Int) : Server ={
     messageCount+=1;
-    println(id);
     if (belongsToMe(key)) return this;
     var n_key = key;
     if (key < id) n_key = key + c;
