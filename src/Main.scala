@@ -12,7 +12,7 @@ object Main {
   var w = 1000000;
   var i = 5;
   var sm = 30;
-  var rnd = new Random(42);
+  var rnd = new Random();
   def main(args: Array[String]): Unit = {
     parsePara(args)
     println("Parameters: S: " + s + " , E: " + e + " , N: "+ n + " , W: "+ w + " , I:" + i + " , Sm: " + sm)
@@ -152,7 +152,8 @@ object Main {
     }
   }
   def printWriteCount(network : Server,size : Int): Unit = {
-    println("NetworkSize: " + size)
+    println("NetworkSize: " + (size - 1))
+    var total = 0
     var cur = network
     while(cur.nextServer!= network){
       println(cur.getServerId() + ": writeCount " + cur.writeCount);
@@ -162,11 +163,11 @@ object Main {
   }
 
   def printPutCount(network : Server): Unit = {
-    println("NetworkSize: " + serverList.size)
-    var cur = network
+    println("NetworkSize: " + (serverList.size-1))
+    var cur = network;
     var total = 0
     while (cur.nextServer != network) {
-      println(cur.getServerId() + ": putCount " + cur.putCount);
+      //println(cur.getServerId() + ": putCount " + cur.putCount);
       total += cur.putCount;
       cur = cur.nextServer;
     }
@@ -182,11 +183,11 @@ object Main {
     }
   }
   def printPutFingerCount(network : Server): Unit = {
-    println("NetworkSize: " + serverList2.size)
+    println("NetworkSize: " + (serverList2.size-1))
     var cur = network
     var total = 0
     while (cur.nextServer != network) {
-      println(cur.getServerId() + ": putCount " + cur.putWithFingerCount);
+      //println(cur.getServerId() + ": putCount " + cur.putWithFingerCount);
       total += cur.putWithFingerCount;
       cur = cur.nextServer;
     }
