@@ -11,21 +11,15 @@ When connecting the servers they automatically adjust the network,
 there is therefore no need to call a special init() function on the 
 network.
 
+We impleneted a overlay network where each server has a lookup table 
+for other servers on the circle. Similar to cord, the finger table is
+populated with floor(log_2(c/2)) entries. Where the i-th entry is the 
+successor of the id+2^i key on the circle. This ensures that a lookup
+of a key takes log_2(n) for a network of size n.
 
-
-
-
-
-
-README	General information
-
-
-THANKS	Acknowledgments
-
-CHANGELOG	A detailed changelog, intended for programmers
-
-NEWS	A basic changelog, intended for users
-
+Our implenetation has two versions of get and put, one that uses the 
+finger table for lookup and the other uses the doubly linked list. In
+our experiments we show the efficency of each.
 
 
 The main funciton takes in parameters:
@@ -35,8 +29,6 @@ The main funciton takes in parameters:
   -w How many write operations should be simulated. Defualt 1000000.
   -i How many servers are added to the network at each step. Defualt 5.
   -sm How many servers are at the end of the simulation. Default 30.
-
-
   
 AUTHORS	
     Ingibergur Sindri Stefnisson 
