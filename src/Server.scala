@@ -60,7 +60,7 @@ class Server(id: Int, n: Int, c: Int)  {
       }
     }
     else 
-      findNextWithFinger(key).put(key,data);
+      findNextWithFinger(key).putWithFinger(key,data);
   }
   
   def findNextWithFinger(key:Int) : Server ={
