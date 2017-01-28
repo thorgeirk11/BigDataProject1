@@ -17,7 +17,6 @@ object Main {
     parsePara(args)
     println("Parameters: S: " + s + " , E: " + e + " , N: "+ n + " , W: "+ w + " , I:" + i + " , Sm: " + sm)
     println("Resetting counter between each W random write operations")
-    println("---------------------")
     testPut();
 
   }
@@ -56,20 +55,20 @@ object Main {
       intList ::= k
     }
 
-    println("---------------Linked List---------------")
-    writeToNetwork()
-    printWriteCount(network,serverList.size)
-    printPutCount(network)
-    resetAllCounters(network)
-    println("---------------Fingering---------------")
-    writeToNetworkWithFinger()
-    printWriteCount(network,serverList.size)
-    printPutFingerCount(network)
-    resetAllCounters(network)
-    //begin test 2
-
      for(x <- s to sm-i by i) {
-      var j = 0
+      println("---------------Linked List---------------")
+      rnd = new Random(42);
+      writeToNetwork()
+      printWriteCount(network,serverList.size)
+      printPutCount(network)
+      resetAllCounters(network)
+      rnd = new Random(42);
+      println("---------------Fingering---------------")
+      writeToNetworkWithFinger()
+      printWriteCount(network,serverList.size)
+      printPutFingerCount(network)
+      resetAllCounters(network)
+       
       for (j <- 0 to i-1) {
         var k = rnd.nextInt(e + 1);
         while (intList.contains(k)) {
@@ -80,33 +79,16 @@ object Main {
         serverList ::= tmp
         intList ::= k
       }
-       println("---------------Linked List---------------")
-       writeToNetwork()
-       printWriteCount(network,serverList.size)
-       printPutCount(network)
-       resetAllCounters(network)
-
-       println("---------------Fingering---------------")
-       writeToNetworkWithFinger()
-       printWriteCount(network,serverList.size)
-       printPutFingerCount(network)
-       resetAllCounters(network)
     }
-
-        
-
   }
 
   def writeToNetwork() : Unit = {
-    var x = 0
     for (x <- 0 to w) {
       var i = rnd.nextInt(s+1)
       serverList(i).put(rnd.nextInt(e+1), "lol"+x)
     }
   }
   def writeToNetworkWithFinger() : Unit = {
-
-    var x = 0
     for (x <- 0 to w) {
       var i = rnd.nextInt(s+1)
       var key = rnd.nextInt(e+1);
@@ -114,66 +96,57 @@ object Main {
     }
   }
   def printWriteCount(network : Server,size : Int): Unit = {
-    println("NetworkSize: " + (size - 1))
-    var total = 0
-    var cur = network
-    while(cur.nextServer!= network){
-      println(cur.getServerId() + ": writeCount " + cur.writeCount);
-      cur = cur.nextServer;
-    }
-    println("-----------------------")
+    foreach(network, s => println(s.getServerId() + " " +
+                                  //s.writeCount + " " +
+                                  s.messageCount));
+    println
   }
 
   def printPutCount(network : Server): Unit = {
-    var cur = network;
     var total = 0
-    while (cur.nextServer != network) {
-      //println(cur.getServerId() + ": putCount " + cur.putCount);
-      total += cur.putCount;
-      cur = cur.nextServer;
-    }
-    println("Put alltogether: " + total)
+    foreach(network, total += _.putCount);
+    println("Sum " + total)
   }
   def resetAllCounters(network : Server): Unit = {
-    var cur = network
-    while(cur.nextServer != network) {
-      cur.resetCounters()
-      cur = cur.nextServer
-
-    }
+    foreach(network, _.resetCounters);
   }
   def printPutFingerCount(network : Server): Unit = {
-    var cur = network
     var total = 0
+    foreach(network, total += _.putWithFingerCount);
+    println("Sum " + total)
+  }
+  
+  
+  def foreach(network:Server, callback: (Server) => Unit){
+    var cur = network
     while (cur.nextServer != network) {
-      //println(cur.getServerId() + ": putCount " + cur.putWithFingerCount);
-      total += cur.putWithFingerCount;
+      callback(cur);
       cur = cur.nextServer;
     }
-    println("Put Finger alltogether: " + total)
   }
+  
   def parsePara(args: Array[String]):Unit = {
-    var x = 0
-    for (x <- 0 to args.size -1 ) {
-
-      if (args(x) == "-s"){
-        s = args(x+1).toInt;
-      }
-      if (args(x) == "-e"){
-        e = args(x+1).toInt;
-      }
-      if (args(x) =="-n"){
-        n = args(x+1).toInt;
-      }
-      if (args(x) =="-w"){
-        w = args(x+1).toInt;
-      }
-      if (args(x) == "-i"){
-        i = args(x+1).toInt;
-      }
-      if (args(x) == "-sm"){
-        sm = args(x+1).toInt;
-      }
+  var x = 0
+  for (x <- 0 to args.size -1 ) {
+  
+    if (args(x) == "-s"){
+      s = args(x+1).toInt;
+    }
+    if (args(x) == "-e"){
+      e = args(x+1).toInt;
+    }
+    if (args(x) =="-n"){
+      n = args(x+1).toInt;
+    }
+    if (args(x) =="-w"){
+      w = args(x+1).toInt;
+    }
+    if (args(x) == "-i"){
+      i = args(x+1).toInt;
+    }
+    if (args(x) == "-sm"){
+      sm = args(x+1).toInt;
+    }
     }
   }
 

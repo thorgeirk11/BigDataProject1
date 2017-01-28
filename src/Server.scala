@@ -112,7 +112,10 @@ class Server(id: Int, n: Int, c: Int)  {
         cur = cur.nextServer;
       }
     }
-    else nextServer.put(key,data);
+    else{
+      messageCount += 1;
+      nextServer.put(key,data);
+    }
   }
   private def writeData(key:Int, data:String) :Unit = {
     writeCount+=1;
