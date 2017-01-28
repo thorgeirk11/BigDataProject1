@@ -18,12 +18,7 @@ object Main {
     println("Parameters: S: " + s + " , E: " + e + " , N: "+ n + " , W: "+ w + " , I:" + i + " , Sm: " + sm)
     println("Resetting counter between each W random write operations")
     println("---------------------")
-    println("Testing writes by just going in a circle")
     testPut();
-
-    println("---------------------")
-    println("Testing writes by finger table")
-    testPutFinger()
 
   }
 
@@ -45,50 +40,6 @@ object Main {
   var intList2:List[Int] = List()
 
 
-  def testPutFinger() : Unit = {
-    var network = new Server(rnd.nextInt(e + 1), n,e);
-    network.buildFingerTable();
-
-    serverList2 ::= network
-    intList2 ::= network.getServerId()
-    var x = 0;
-    for (x <- 1 to s) {
-      var k = rnd.nextInt(e + 1);
-      while (intList2.contains(k)) {
-        k = rnd.nextInt(e + 1);
-      }
-      var tmp = new Server(k,n,e)
-      network.connect(tmp);
-      serverList2 ::= tmp
-      intList2 ::= k
-    }
-
-    writeToNetworkWithFinger()
-    printWriteCount(network, serverList2.size)
-    printPutFingerCount(network)
-    resetAllCounters(network)
-    //begin test 2
-
-    for(x <- s to sm-i by i) {
-      println("X:" + x)
-      var j = 0
-      for (j <- 0 to i-1) {
-        var k = rnd.nextInt(e + 1);
-        while (intList2.contains(k)) {
-          k = rnd.nextInt(e + 1);
-        }
-        var tmp = new Server(k, n, e)
-        network.connect(tmp);
-        serverList2 ::= tmp
-        intList2 ::= k
-      }
-      writeToNetworkWithFinger()
-      printWriteCount(network,serverList2.size)
-      printPutFingerCount(network)
-      resetAllCounters(network)
-    }
-
-  }
   def testPut(): Unit = {
     var network = new Server(rnd.nextInt(e + 1), n,e);
     serverList ::= network
@@ -105,15 +56,19 @@ object Main {
       intList ::= k
     }
 
-
+    println("---------------Linked List---------------")
     writeToNetwork()
     printWriteCount(network,serverList.size)
     printPutCount(network)
     resetAllCounters(network)
+    println("---------------Fingering---------------")
+    writeToNetworkWithFinger()
+    printWriteCount(network,serverList.size)
+    printPutFingerCount(network)
+    resetAllCounters(network)
     //begin test 2
 
      for(x <- s to sm-i by i) {
-      println("X:" + x)
       var j = 0
       for (j <- 0 to i-1) {
         var k = rnd.nextInt(e + 1);
@@ -125,10 +80,17 @@ object Main {
         serverList ::= tmp
         intList ::= k
       }
-      writeToNetwork()
-      printWriteCount(network,serverList.size);
-      printPutCount(network)
-      resetAllCounters(network)
+       println("---------------Linked List---------------")
+       writeToNetwork()
+       printWriteCount(network,serverList.size)
+       printPutCount(network)
+       resetAllCounters(network)
+
+       println("---------------Fingering---------------")
+       writeToNetworkWithFinger()
+       printWriteCount(network,serverList.size)
+       printPutFingerCount(network)
+       resetAllCounters(network)
     }
 
         
@@ -148,7 +110,7 @@ object Main {
     for (x <- 0 to w) {
       var i = rnd.nextInt(s+1)
       var key = rnd.nextInt(e+1);
-      serverList2(i).putWithFinger(key, "lol"+x)
+      serverList(i).putWithFinger(key, "lol"+x)
     }
   }
   def printWriteCount(network : Server,size : Int): Unit = {
@@ -163,7 +125,6 @@ object Main {
   }
 
   def printPutCount(network : Server): Unit = {
-    println("NetworkSize: " + (serverList.size-1))
     var cur = network;
     var total = 0
     while (cur.nextServer != network) {
@@ -171,7 +132,6 @@ object Main {
       total += cur.putCount;
       cur = cur.nextServer;
     }
-    println("-----------------------")
     println("Put alltogether: " + total)
   }
   def resetAllCounters(network : Server): Unit = {
@@ -183,7 +143,6 @@ object Main {
     }
   }
   def printPutFingerCount(network : Server): Unit = {
-    println("NetworkSize: " + (serverList2.size-1))
     var cur = network
     var total = 0
     while (cur.nextServer != network) {
@@ -191,7 +150,6 @@ object Main {
       total += cur.putWithFingerCount;
       cur = cur.nextServer;
     }
-    println("-----------------------")
     println("Put Finger alltogether: " + total)
   }
   def parsePara(args: Array[String]):Unit = {
