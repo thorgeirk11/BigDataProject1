@@ -1,0 +1,468 @@
+/usr/lib/jdk1.8.0_111/bin/java -Didea.launcher.port=7536 -Didea.launcher.bin.path=/home/centos/Downloads/idea-IC-163.10154.41/bin -Dfile.encoding=UTF-8 -classpath /usr/lib/jdk1.8.0_111/jre/lib/charsets.jar:/usr/lib/jdk1.8.0_111/jre/lib/deploy.jar:/usr/lib/jdk1.8.0_111/jre/lib/ext/cldrdata.jar:/usr/lib/jdk1.8.0_111/jre/lib/ext/dnsns.jar:/usr/lib/jdk1.8.0_111/jre/lib/ext/jaccess.jar:/usr/lib/jdk1.8.0_111/jre/lib/ext/jfxrt.jar:/usr/lib/jdk1.8.0_111/jre/lib/ext/localedata.jar:/usr/lib/jdk1.8.0_111/jre/lib/ext/nashorn.jar:/usr/lib/jdk1.8.0_111/jre/lib/ext/sunec.jar:/usr/lib/jdk1.8.0_111/jre/lib/ext/sunjce_provider.jar:/usr/lib/jdk1.8.0_111/jre/lib/ext/sunpkcs11.jar:/usr/lib/jdk1.8.0_111/jre/lib/ext/zipfs.jar:/usr/lib/jdk1.8.0_111/jre/lib/javaws.jar:/usr/lib/jdk1.8.0_111/jre/lib/jce.jar:/usr/lib/jdk1.8.0_111/jre/lib/jfr.jar:/usr/lib/jdk1.8.0_111/jre/lib/jfxswt.jar:/usr/lib/jdk1.8.0_111/jre/lib/jsse.jar:/usr/lib/jdk1.8.0_111/jre/lib/management-agent.jar:/usr/lib/jdk1.8.0_111/jre/lib/plugin.jar:/usr/lib/jdk1.8.0_111/jre/lib/resources.jar:/usr/lib/jdk1.8.0_111/jre/lib/rt.jar:/home/centos/IdeaProjects/Verk1/out/production/Verk1:/home/centos/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.12.1.jar:/home/centos/.ivy2/cache/org.scala-lang/scala-reflect/jars/scala-reflect-2.12.1.jar:/home/centos/Downloads/idea-IC-163.10154.41/lib/idea_rt.jar com.intellij.rt.execution.application.AppMain Main -s 10 -e 10000 -n 3 -w 1000000 -i 5 -sm 30
+Parameters: S: 10 , E: 10000 , N: 3 , W: 1000000 , I:5 , Sm: 30
+Resetting counter between each W random write operations
+---------------------
+Testing writes by just going in a circle
+NetworkSize: 11
+4903: writeCount 170129
+4954: writeCount 127537
+5237: writeCount 69378
+8484: writeCount 357343
+8591: writeCount 362828
+1025: writeCount 577835
+2009: writeCount 352972
+2608: writeCount 402236
+3204: writeCount 218384
+3680: writeCount 167299
+-----------------------
+NetworkSize: 11
+4903: putCount 538952
+4954: putCount 593673
+5237: putCount 679474
+8484: putCount 741901
+8591: putCount 508692
+1025: putCount 588851
+2009: putCount 436131
+2608: putCount 428679
+3204: putCount 459759
+3680: putCount 491443
+-----------------------
+Put alltogether: 5467555
+X:10
+NetworkSize: 16
+4903: writeCount 85143
+4954: writeCount 56799
+5237: writeCount 69550
+6077: writeCount 120713
+6462: writeCount 154854
+8484: writeCount 324730
+8591: writeCount 251788
+8874: writeCount 250427
+1025: writeCount 254474
+2009: writeCount 341890
+2608: writeCount 373327
+3204: writeCount 217953
+3680: writeCount 167268
+4050: writeCount 149428
+4386: writeCount 122336
+-----------------------
+NetworkSize: 16
+4903: putCount 451820
+4954: putCount 506466
+5237: putCount 592191
+6077: putCount 655010
+6462: putCount 662037
+8484: putCount 714550
+8591: putCount 511959
+8874: putCount 591562
+1025: putCount 563089
+2009: putCount 439132
+2608: putCount 431915
+3204: putCount 462596
+3680: putCount 402726
+4050: putCount 446467
+4386: putCount 500713
+-----------------------
+Put alltogether: 7932233
+X:15
+NetworkSize: 21
+4903: writeCount 84972
+4954: writeCount 56631
+5237: writeCount 69457
+6077: writeCount 117489
+6462: writeCount 150893
+7793: writeCount 262171
+8484: writeCount 240881
+8591: writeCount 213108
+8860: writeCount 113112
+8874: writeCount 39197
+1025: writeCount 243378
+1438: writeCount 261689
+2009: writeCount 313132
+2354: writeCount 143705
+2608: writeCount 117047
+3204: writeCount 119455
+3578: writeCount 126680
+3680: writeCount 107143
+4050: writeCount 84875
+4386: writeCount 80732
+-----------------------
+NetworkSize: 21
+4903: putCount 562119
+4954: putCount 525957
+5237: putCount 520891
+6077: putCount 584034
+6462: putCount 591019
+7793: putCount 643402
+8484: putCount 510241
+8591: putCount 440991
+8860: putCount 520884
+8874: putCount 584188
+1025: putCount 582795
+1438: putCount 458960
+2009: putCount 417755
+2354: putCount 451930
+2608: putCount 417526
+3204: putCount 482694
+3578: putCount 514240
+3680: putCount 476690
+4050: putCount 557326
+4386: putCount 610929
+-----------------------
+Put alltogether: 10454571
+X:20
+NetworkSize: 26
+4903: writeCount 85468
+4954: writeCount 56625
+5237: writeCount 69036
+6077: writeCount 117084
+6462: writeCount 150395
+7793: writeCount 255752
+8484: writeCount 240545
+8528: writeCount 212583
+8591: writeCount 79518
+8860: writeCount 37862
+8874: writeCount 34797
+154: writeCount 159430
+1025: writeCount 216000
+1438: writeCount 256056
+2009: writeCount 185091
+2354: writeCount 132989
+2608: writeCount 116955
+2738: writeCount 76502
+3204: writeCount 84940
+3578: writeCount 97205
+3644: writeCount 93520
+3680: writeCount 47867
+3959: writeCount 41453
+4050: writeCount 40782
+4386: writeCount 71151
+-----------------------
+NetworkSize: 26
+4903: putCount 579227
+4954: putCount 543283
+5237: putCount 538221
+6077: putCount 601050
+6462: putCount 517058
+7793: putCount 568883
+8484: putCount 435496
+8528: putCount 457274
+8591: putCount 452841
+8860: putCount 538114
+8874: putCount 510985
+154: putCount 600793
+1025: putCount 473013
+1438: putCount 476850
+2009: putCount 435426
+2354: putCount 469402
+2608: putCount 434652
+2738: putCount 499942
+3204: putCount 487005
+3578: putCount 531961
+3644: putCount 585415
+3680: putCount 578739
+3959: putCount 665997
+4050: putCount 637766
+4386: putCount 628751
+-----------------------
+Put alltogether: 13248144
+X:25
+NetworkSize: 31
+4903: writeCount 85449
+4954: writeCount 56724
+5237: writeCount 69617
+6077: writeCount 117732
+6462: writeCount 151190
+7793: writeCount 255324
+8484: writeCount 240210
+8528: writeCount 206108
+8591: writeCount 79945
+8860: writeCount 37684
+8874: writeCount 34725
+154: writeCount 155993
+442: writeCount 162287
+747: writeCount 191481
+1025: writeCount 87202
+1438: writeCount 99655
+2009: writeCount 125797
+2354: writeCount 132527
+2580: writeCount 117744
+2608: writeCount 59909
+2738: writeCount 38507
+3075: writeCount 52160
+3204: writeCount 59641
+3578: writeCount 83770
+3644: writeCount 56807
+3680: writeCount 47513
+3758: writeCount 19833
+3959: writeCount 31881
+4050: writeCount 37500
+4386: writeCount 63313
+-----------------------
+NetworkSize: 31
+4903: putCount 706682
+4954: putCount 670502
+5237: putCount 665446
+6077: putCount 637065
+6462: putCount 552770
+7793: putCount 514256
+8484: putCount 381741
+8528: putCount 403193
+8591: putCount 398781
+8860: putCount 392429
+8874: putCount 365509
+154: putCount 454906
+442: putCount 418228
+747: putCount 480788
+1025: putCount 450141
+1438: putCount 513558
+2009: putCount 472259
+2354: putCount 415470
+2580: putCount 471198
+2608: putCount 448550
+2738: putCount 536065
+3075: putCount 614381
+3204: putCount 580687
+3578: putCount 567777
+3644: putCount 621511
+3680: putCount 614780
+3758: putCount 702348
+3959: putCount 785483
+4050: putCount 765186
+4386: putCount 755951
+-----------------------
+Put alltogether: 16357641
+---------------------
+Testing writes by finger table
+NetworkSize: 11
+699: writeCount 179577
+3938: writeCount 469256
+3977: writeCount 425094
+6668: writeCount 596297
+6719: writeCount 277774
+8299: writeCount 432455
+8353: writeCount 168976
+8389: writeCount 167521
+8906: writeCount 60600
+9246: writeCount 89021
+-----------------------
+NetworkSize: 11
+699: putCount 444032
+3938: putCount 674010
+3977: putCount 314090
+6668: putCount 467466
+6719: putCount 225093
+8299: putCount 339685
+8353: putCount 99292
+8389: putCount 135906
+8906: putCount 276810
+9246: putCount 161113
+-----------------------
+Put Finger alltogether: 3137497
+X:10
+NetworkSize: 16
+699: writeCount 100764
+2229: writeCount 253689
+2464: writeCount 220914
+3938: writeCount 323016
+3977: writeCount 173930
+4836: writeCount 242006
+6668: writeCount 272979
+6719: writeCount 274282
+8299: writeCount 346788
+8353: writeCount 169194
+8389: writeCount 167697
+8906: writeCount 61074
+9246: writeCount 89597
+9689: writeCount 133418
+9724: writeCount 215304
+-----------------------
+NetworkSize: 16
+699: putCount 197911
+2229: putCount 350180
+2464: putCount 279269
+3938: putCount 387534
+3977: putCount 82120
+4836: putCount 347338
+6668: putCount 434342
+6719: putCount 225433
+8299: putCount 290487
+8353: putCount 8561
+8389: putCount 136927
+8906: putCount 283747
+9246: putCount 197315
+9689: putCount 178540
+9724: putCount 272587
+-----------------------
+Put Finger alltogether: 3672291
+X:15
+NetworkSize: 21
+699: writeCount 101415
+2229: writeCount 250441
+2464: writeCount 217114
+3706: writeCount 308130
+3938: writeCount 171205
+3977: writeCount 151827
+4836: writeCount 112643
+5949: writeCount 206490
+6668: writeCount 268866
+6719: writeCount 188539
+7218: writeCount 132673
+8299: writeCount 162739
+8353: writeCount 163029
+8389: writeCount 117064
+8749: writeCount 50812
+8906: writeCount 55432
+9246: writeCount 85822
+9574: writeCount 85487
+9689: writeCount 78304
+9724: writeCount 47811
+-----------------------
+NetworkSize: 21
+699: putCount 181908
+2229: putCount 373640
+2464: putCount 234574
+3706: putCount 362818
+3938: putCount 78121
+3977: putCount 81623
+4836: putCount 320307
+5949: putCount 312032
+6668: putCount 204524
+6719: putCount 136742
+7218: putCount 251270
+8299: putCount 227557
+8353: putCount 9029
+8389: putCount 36295
+8749: putCount 184569
+8906: putCount 88673
+9246: putCount 105236
+9574: putCount 195353
+9689: putCount 105121
+9724: putCount 55022
+-----------------------
+Put Finger alltogether: 3544414
+X:20
+NetworkSize: 26
+699: writeCount 100780
+2229: writeCount 249887
+2464: writeCount 217394
+2507: writeCount 185672
+3706: writeCount 147512
+3938: writeCount 147150
+3977: writeCount 146679
+4836: writeCount 113303
+5603: writeCount 171354
+5773: writeCount 184606
+5949: writeCount 110717
+6668: writeCount 106676
+6719: writeCount 94975
+7218: writeCount 127340
+8299: writeCount 163736
+8353: writeCount 164024
+8366: writeCount 119293
+8389: writeCount 9054
+8749: writeCount 39534
+8906: writeCount 53884
+9165: writeCount 79259
+9246: writeCount 49913
+9574: writeCount 66792
+9689: writeCount 52411
+9724: writeCount 47681
+-----------------------
+NetworkSize: 26
+699: putCount 198018
+2229: putCount 275509
+2464: putCount 123122
+2507: putCount 192917
+3706: putCount 395636
+3938: putCount 85955
+3977: putCount 89977
+4836: putCount 192462
+5603: putCount 187011
+5773: putCount 206621
+5949: putCount 172687
+6668: putCount 201006
+6719: putCount 50476
+7218: putCount 234931
+8299: putCount 238639
+8353: putCount 6468
+8366: putCount 123406
+8389: putCount 34860
+8749: putCount 168181
+8906: putCount 65835
+9165: putCount 147825
+9246: putCount 37721
+9574: putCount 193178
+9689: putCount 109860
+9724: putCount 101015
+-----------------------
+Put Finger alltogether: 3833316
+X:25
+NetworkSize: 31
+699: writeCount 101399
+2229: writeCount 250621
+2464: writeCount 217837
+2478: writeCount 182706
+2507: writeCount 27878
+3706: writeCount 124171
+3938: writeCount 145910
+3977: writeCount 146692
+4046: writeCount 38058
+4096: writeCount 16639
+4836: writeCount 85497
+5603: writeCount 155857
+5773: writeCount 167722
+5949: writeCount 111722
+5950: writeCount 37828
+6668: writeCount 89561
+6719: writeCount 76862
+7218: writeCount 126811
+8299: writeCount 162835
+8353: writeCount 163095
+8366: writeCount 114349
+8389: writeCount 8829
+8749: writeCount 39582
+8906: writeCount 53931
+9165: writeCount 77471
+9246: writeCount 49685
+9371: writeCount 48115
+9574: writeCount 41489
+9689: writeCount 44789
+9724: writeCount 35769
+-----------------------
+NetworkSize: 31
+699: putCount 200721
+2229: putCount 250984
+2464: putCount 149848
+2478: putCount 94205
+2507: putCount 202503
+3706: putCount 285783
+3938: putCount 34605
+3977: putCount 67086
+4046: putCount 155087
+4096: putCount 162456
+4836: putCount 188740
+5603: putCount 199082
+5773: putCount 164803
+5949: putCount 82979
+5950: putCount 156670
+6668: putCount 257180
+6719: putCount 50358
+7218: putCount 234256
+8299: putCount 293753
+8353: putCount 6405
+8366: putCount 126594
+8389: putCount 38186
+8749: putCount 111770
+8906: putCount 54875
+9165: putCount 133389
+9246: putCount 19601
+9371: putCount 193179
+9574: putCount 41345
+9689: putCount 60931
+9724: putCount 101097
+-----------------------
+Put Finger alltogether: 4118471
+
+Process finished with exit code 0
+
