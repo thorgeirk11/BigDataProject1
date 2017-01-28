@@ -32,9 +32,14 @@ class Server(id: Int, n: Int, c: Int)  {
   }
 
   def UpdateFingerTable() : Unit ={
-    for (i <- 0 to fingerTable.length-1) {
-      var fingerId = java.lang.Math.floorMod((id + math.pow(2,i+1)).toInt,  c);
-      fingerTable(i) = findSuccessor(fingerId);
+    if (fingerTable.length == 0) {
+      buildFingerTable();
+    }
+    else{
+      for (i <- 0 to fingerTable.length-1) {
+        var fingerId = java.lang.Math.floorMod((id + math.pow(2,i+1)).toInt,  c);
+        fingerTable(i) = findSuccessor(fingerId);
+      }
     }
   }
 
@@ -67,7 +72,7 @@ class Server(id: Int, n: Int, c: Int)  {
                                            math.abs( c + s.getServerId() - n_key) 
                                          else 
                                            math.abs( s.getServerId() - n_key));
-    if (closest.getServerId() < key)
+    if (closest.getServerId() < key && id < closest.getServerId())
       return closest.nextServer;
     else
       return closest;
