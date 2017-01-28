@@ -123,12 +123,12 @@ object Main {
     
     println
 
-    for (x <- 1 to 1000) {
+    //for (x <- 1 to 1000) {
       var i = rnd.nextInt(s+1)
       var key = rnd.nextInt(e+1);
-      println("Entry " + serverList(i).getServerId());
+      println("Entry " + serverList(i).getServerId() + " key " + key);
       serverList(i).getWithFinger(key)
-    }
+    //}
         
     println("NetworkSize: " + sm)
     var cur = network

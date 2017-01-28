@@ -40,14 +40,21 @@ class Server(id: Int, n: Int, c: Int)  {
 
   def getWithFinger(key:Int) : String = {
     messageCount+=1;
+    println(id);
     if (dataMap.contains(key)) return dataMap(key); 
     if (belongsToMe(key)) return null;
     
     var n_key = key;
     if (key < id) n_key = key + c;
-    var closest = fingerTable.minBy(s => if (s.getServerId() < id) math.abs( c + s.getServerId() - n_key) 
-                                         else math.abs( s.getServerId() - n_key));
-    return closest.getWithFinger(key);
+    var closest = fingerTable.minBy(s => if (s.getServerId() < id) 
+                                           math.abs( c + s.getServerId() - n_key) 
+                                         else 
+                                           math.abs( s.getServerId() - n_key));
+    
+    if (closest.getServerId() < key)
+      return closest.nextServer.getWithFinger(key);
+    else
+      return closest.getWithFinger(key);
   }
   
   def get(key: Int) : String = {
