@@ -11,7 +11,7 @@ object Main {
   var n = 3;
   var w = 1000000;
   var i = 5;
-  var sm = 30;
+  var sm = 35;
   var rnd = new Random();
   def main(args: Array[String]): Unit = {
     parsePara(args)
@@ -21,18 +21,6 @@ object Main {
 
   }
 
-  def printFingerTable(network: Server): Unit = {
-    var cur = network
-    while (cur.nextServer != network) {
-      println("Node " + cur.getServerId() + ":")
-      for (x <- cur.fingerTable) println(x.getServerId());
-      //cur.dataMap.foreach(println);
-      cur = cur.nextServer;
-    }
-    println("Node " + cur.getServerId() + ":")
-    for (x <- cur.fingerTable) println(x.getServerId());
-    //cur.dataMap.foreach(println);
-  }
   var serverList:List[Server] = List()
   var serverList2:List[Server] = List()
   var intList:List[Int] = List()
@@ -44,7 +32,7 @@ object Main {
     serverList ::= network
     intList ::= network.getServerId()
     var x = 0;
-    for (x <- 1 to s) {
+    for (x <- 1 to s-1) {
       var k = rnd.nextInt(e + 1);
       while (intList.contains(k)) {
         k = rnd.nextInt(e + 1);
@@ -56,17 +44,14 @@ object Main {
     }
 
      for(x <- s to sm-i by i) {
-      println("---------------Linked List---------------")
+       
+      println
+      println("network size: " + (serverList.size));
       rnd = new Random(42);
       writeToNetwork()
-      printWriteCount(network,serverList.size)
-      printPutCount(network)
-      resetAllCounters(network)
       rnd = new Random(42);
-      println("---------------Fingering---------------")
       writeToNetworkWithFinger()
-      printWriteCount(network,serverList.size)
-      printPutFingerCount(network)
+      printCounts(network,serverList.size)
       resetAllCounters(network)
        
       for (j <- 0 to i-1) {
@@ -83,22 +68,28 @@ object Main {
   }
 
   def writeToNetwork() : Unit = {
-    for (x <- 0 to w) {
-      var i = rnd.nextInt(s+1)
+    for (x <- 0 to w-1) {
+      var i = rnd.nextInt(s)
       serverList(i).put(rnd.nextInt(e+1), "lol"+x)
     }
   }
   def writeToNetworkWithFinger() : Unit = {
-    for (x <- 0 to w) {
-      var i = rnd.nextInt(s+1)
-      var key = rnd.nextInt(e+1);
-      serverList(i).putWithFinger(key, "lol"+x)
+    for (x <- 0 to w-1) {
+      var i = rnd.nextInt(s)
+      serverList(i).putWithFinger(rnd.nextInt(e), "lol"+x)
     }
   }
-  def printWriteCount(network : Server,size : Int): Unit = {
-    foreach(network, s => println(s.getServerId() + " " +
-                                  //s.writeCount + " " +
-                                  s.messageCount));
+  def printCounts(network : Server,size : Int): Unit = {
+    foreach(network, s => println("id: " + s.getServerId() + 
+                                  " putCount: " + s.putCount + 
+                                  " putWithFingerCount: " +s.putWithFingerCount));
+
+    //foreach(network, s => {
+    //  var prev = s.prevServer.getServerId();
+    //  var sid = s.getServerId();
+    //  if (prev > s.getServerId()) sid += e;
+    //    println(s.getServerId() + " " + (sid-prev) + " " +  (sid-prev) / (e*1.0)   + " " + s.writeCount)
+    //});
     println
   }
 
@@ -108,7 +99,7 @@ object Main {
     println("Sum " + total)
   }
   def resetAllCounters(network : Server): Unit = {
-    foreach(network, _.resetCounters);
+    foreach(network, _.resetCounters());
   }
   def printPutFingerCount(network : Server): Unit = {
     var total = 0
@@ -123,6 +114,7 @@ object Main {
       callback(cur);
       cur = cur.nextServer;
     }
+    callback(cur);
   }
   
   def parsePara(args: Array[String]):Unit = {

@@ -6,10 +6,10 @@
 // n = data replication factor 
 // c = how many unique keys in the circle
 class Server(id: Int, n: Int, c: Int)  {
-  var writeCount = 0;
+  var writeCount = 0
   var putCount = 0
   var putWithFingerCount = 0
-  var messageCount = 0;
+
   var dataMap = collection.mutable.Map[Int, String]();
   var fingerTable = new Array[Server](0);
   var flatFingerTable = new Array[Int](0);
@@ -22,7 +22,6 @@ class Server(id: Int, n: Int, c: Int)  {
     writeCount = 0
     putCount = 0
     putWithFingerCount = 0
-    messageCount = 0
   }
   def getServerId() : Int = id;
 
@@ -82,7 +81,6 @@ class Server(id: Int, n: Int, c: Int)  {
   }
   
   def findNextWithFinger(key:Int) : Server ={
-    messageCount+=1;
     if (belongsToMe(key)) return this;
     var n_key = key;
     if (key < id) n_key = key + c;
@@ -97,7 +95,6 @@ class Server(id: Int, n: Int, c: Int)  {
   }
 
   def get(key: Int) : String = {
-    messageCount += 1;
     if (belongsToMe(key)) return dataMap(key);
     else return nextServer.get(key);
   }
@@ -113,7 +110,6 @@ class Server(id: Int, n: Int, c: Int)  {
       }
     }
     else{
-      messageCount += 1;
       nextServer.put(key,data);
     }
   }
