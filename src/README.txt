@@ -4,11 +4,11 @@ We implemented a circle based system, similar to chord.
 
 Server class is the nodes in the network. At their core is a doubly
 linked list, each server has a next and prev link. Each server stores
-data for the key space between n previous server id and its own id, 
+data for the key space between n previous server ids' and its own id, 
 where n is the replication factor. 
 
-When connecting the servers they automatically adjust the network,
-there is therefore no need to call a special init() function on the 
+When connecting new servers, they automatically adjust the network,
+therefore there is no need to call a special init() function on the 
 network.
 
 We implemented a overlay network where each server has a lookup table 
@@ -21,6 +21,10 @@ Our implementation has two versions of get and put, one that uses the
 finger table for lookup and the other uses the doubly linked list. In
 our experiments we show the efficency of each.
 
+Our implementation handles data replication by copying the data to n 
+succeeding servers. New servers get data from existing servers and 
+existing servers reduce their key space range and remove the data 
+entries that lay outside the new range.
 
 The main funciton takes in parameters:
   -s Number of initial servers in the network. Default is 10.
